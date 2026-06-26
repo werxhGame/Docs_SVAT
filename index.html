@@ -58,7 +58,7 @@
         <div class="result" id="phoneResult">⚡ Введите номер телефона...</div>
     </div>
 
-    <div class="footer">🔹 IP: ip-api.com | Номер: определяет страну</div>
+    <div class="footer">🔹 IP: ip-api.com / ipwhois.io</div>
 </div>
 
 <script>
@@ -75,7 +75,7 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
 });
 
 // ============================================================
-// IP
+// IP (С ДВУМЯ API)
 // ============================================================
 const ipInput = document.getElementById('ipInput');
 const checkIpBtn = document.getElementById('checkIpBtn');
@@ -84,32 +84,57 @@ const ipLoader = document.getElementById('ipLoader');
 const ipResult = document.getElementById('ipResult');
 
 async function getIpInfo(ip) {
-    const url = `http://ip-api.com/json/${ip}?fields=status,message,country,regionName,city,isp,lat,lon,timezone,zip,query,as,org`;
+    // Пробуем первый API
     try {
+        const url = `http://ip-api.com/json/${ip}?fields=status,message,country,regionName,city,isp,lat,lon,timezone,zip,query,as,org`;
         const response = await fetch(url);
-        if (!response.ok) return { success: false, error: 'Сервер не отвечает' };
-        const data = await response.json();
-        if (data.status === 'success') {
-            return {
-                success: true,
-                ip: data.query || ip,
-                country: data.country || 'неизвестно',
-                region: data.regionName || 'неизвестно',
-                city: data.city || 'неизвестно',
-                isp: data.isp || 'неизвестно',
-                org: data.org || 'неизвестно',
-                as: data.as || 'неизвестно',
-                lat: data.lat || 'неизвестно',
-                lon: data.lon || 'неизвестно',
-                timezone: data.timezone || 'неизвестно',
-                zip: data.zip || 'неизвестно'
-            };
-        } else {
-            return { success: false, error: data.message || 'Данные не найдены' };
+        if (response.ok) {
+            const data = await response.json();
+            if (data.status === 'success') {
+                return {
+                    success: true,
+                    ip: data.query || ip,
+                    country: data.country || 'неизвестно',
+                    region: data.regionName || 'неизвестно',
+                    city: data.city || 'неизвестно',
+                    isp: data.isp || 'неизвестно',
+                    org: data.org || 'неизвестно',
+                    as: data.as || 'неизвестно',
+                    lat: data.lat || 'неизвестно',
+                    lon: data.lon || 'неизвестно',
+                    timezone: data.timezone || 'неизвестно',
+                    zip: data.zip || 'неизвестно'
+                };
+            }
         }
-    } catch (error) {
-        return { success: false, error: 'Ошибка соединения' };
-    }
+    } catch (e) {}
+
+    // Если первый не сработал — пробуем второй API (ipwhois.io)
+    try {
+        const url2 = `https://ipwhois.io/json/${ip}`;
+        const response2 = await fetch(url2);
+        if (response2.ok) {
+            const data2 = await response2.json();
+            if (data2.success !== false) {
+                return {
+                    success: true,
+                    ip: data2.ip || ip,
+                    country: data2.country || 'неизвестно',
+                    region: data2.region || 'неизвестно',
+                    city: data2.city || 'неизвестно',
+                    isp: data2.isp || 'неизвестно',
+                    org: data2.org || 'неизвестно',
+                    as: data2.asn || 'неизвестно',
+                    lat: data2.latitude || 'неизвестно',
+                    lon: data2.longitude || 'неизвестно',
+                    timezone: data2.timezone || 'неизвестно',
+                    zip: data2.postal || 'неизвестно'
+                };
+            }
+        }
+    } catch (e) {}
+
+    return { success: false, error: 'Не удалось получить данные' };
 }
 
 function displayIpResult(data) {
@@ -165,7 +190,7 @@ myIpBtn.addEventListener('click', async () => {
 });
 
 // ============================================================
-// НОМЕР (БЕЗ ВНЕШНИХ API — ТОЛЬКО СТРАНА ПО КОДУ)
+// НОМЕР (ЛОКАЛЬНОЕ ОПРЕДЕЛЕНИЕ СТРАНЫ)
 // ============================================================
 const phoneInput = document.getElementById('phoneInput');
 const checkPhoneBtn = document.getElementById('checkPhoneBtn');
@@ -203,7 +228,6 @@ const COUNTRY_CODES = {
 
 function getCountryByPhone(phone) {
     const clean = phone.replace(/[^0-9]/g, '');
-    // Пробуем найти страну по префиксу (сначала длинные коды)
     for (const [code, country] of Object.entries(COUNTRY_CODES)) {
         if (clean.startsWith(code)) {
             return country;
@@ -241,7 +265,6 @@ async function checkPhone() {
     checkPhoneBtn.disabled = true;
     phoneResult.innerHTML = '⏳ Поиск...';
 
-    // Имитация задержки (для реализма)
     await new Promise(resolve => setTimeout(resolve, 500));
 
     const country = getCountryByPhone(phone);
@@ -265,7 +288,7 @@ async function checkPhone() {
 checkPhoneBtn.addEventListener('click', checkPhone);
 phoneInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') checkPhone(); });
 
-console.log('🌐 Геолокатор');
+console.log('🌐 Геолокатор загружен, Старший администратор!');
 </script>
 </body>
 </html>
