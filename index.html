@@ -3,257 +3,121 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IP + Номер геолокатор</title>
+    <title>Геолокатор</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', sans-serif;
-        }
-        body {
-            background: #0a0a0f;
-            color: #00ff88;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            padding: 20px;
-        }
-        .container {
-            background: #111118;
-            border: 2px solid #00ff88;
-            border-radius: 20px;
-            padding: 30px 25px;
-            max-width: 520px;
-            width: 100%;
-            box-shadow: 0 0 40px rgba(0, 255, 136, 0.15);
-            text-align: center;
-        }
-        h1 {
-            font-size: 26px;
-            letter-spacing: 2px;
-            text-shadow: 0 0 20px #00ff8866;
-            margin-bottom: 4px;
-        }
-        .sub {
-            color: #888;
-            font-size: 13px;
-            margin-bottom: 20px;
-            letter-spacing: 1px;
-        }
-        .tabs {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 18px;
-        }
-        .tab-btn {
-            flex: 1;
-            padding: 10px;
-            background: #1a1a24;
-            border: 1px solid #333;
-            border-radius: 10px;
-            color: #888;
-            font-weight: bold;
-            font-size: 14px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        .tab-btn.active {
-            background: #00ff88;
-            color: #0a0a0f;
-            border-color: #00ff88;
-        }
-        .tab-btn:hover {
-            background: #00ff8822;
-        }
-        .tab-content {
-            display: none;
-        }
-        .tab-content.active {
-            display: block;
-        }
-        input {
-            width: 100%;
-            padding: 14px;
-            background: #0a0a0f;
-            border: 1px solid #333;
-            border-radius: 10px;
-            color: #00ff88;
-            font-family: 'Courier New', monospace;
-            font-size: 16px;
-            transition: 0.3s;
-            margin-bottom: 10px;
-            text-align: center;
-        }
-        input:focus {
-            border-color: #00ff88;
-            outline: none;
-        }
-        .btn {
-            width: 100%;
-            padding: 14px;
-            background: #00ff88;
-            color: #0a0a0f;
-            border: none;
-            border-radius: 10px;
-            font-weight: bold;
-            font-size: 16px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-        .btn:hover {
-            background: #00cc6a;
-            box-shadow: 0 0 20px #00ff8844;
-        }
-        .btn-secondary {
-            background: #333;
-            color: #00ff88;
-            margin-top: 6px;
-            font-size: 14px;
-            padding: 12px;
-        }
-        .btn-secondary:hover {
-            background: #444;
-        }
-        .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-        .result {
-            background: #0a0a0f;
-            border: 1px solid #222;
-            border-radius: 10px;
-            padding: 15px;
-            margin-top: 15px;
-            font-size: 13px;
-            color: #aaa;
-            text-align: left;
-            white-space: pre-wrap;
-            min-height: 80px;
-            max-height: 400px;
-            overflow-y: auto;
-            font-family: 'Courier New', monospace;
-        }
-        .result .label {
-            color: #888;
-        }
-        .result .value {
-            color: #00ff88;
-            font-weight: bold;
-        }
-        .result .error-text {
-            color: #ff4444;
-            font-weight: bold;
-        }
-        .loader {
-            display: none;
-            margin: 15px auto;
-            width: 40px;
-            height: 40px;
-            border: 4px solid #1a1a24;
-            border-top: 4px solid #00ff88;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-        .loader.active {
-            display: block;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        .footer {
-            margin-top: 15px;
-            color: #555;
-            font-size: 11px;
-            border-top: 1px solid #222;
-            padding-top: 15px;
-        }
+        *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',sans-serif}
+        body{background:#0a0a0f;color:#00ff88;display:flex;justify-content:center;align-items:center;min-height:100vh;padding:20px}
+        .container{background:#111118;border:2px solid #00ff88;border-radius:20px;padding:30px 25px;max-width:520px;width:100%;text-align:center}
+        h1{font-size:26px;letter-spacing:2px;text-shadow:0 0 20px #00ff8866}
+        .sub{color:#888;font-size:13px;margin-bottom:20px}
+        .tabs{display:flex;gap:8px;margin-bottom:18px}
+        .tab-btn{flex:1;padding:10px;background:#1a1a24;border:1px solid #333;border-radius:10px;color:#888;font-weight:bold;font-size:14px;cursor:pointer;transition:0.3s}
+        .tab-btn.active{background:#00ff88;color:#0a0a0f;border-color:#00ff88}
+        .tab-btn:hover{background:#00ff8822}
+        .tab-content{display:none}
+        .tab-content.active{display:block}
+        input{width:100%;padding:14px;background:#0a0a0f;border:1px solid #333;border-radius:10px;color:#00ff88;font-size:16px;margin-bottom:10px;text-align:center}
+        input:focus{border-color:#00ff88;outline:none}
+        .btn{width:100%;padding:14px;background:#00ff88;color:#0a0a0f;border:none;border-radius:10px;font-weight:bold;font-size:16px;cursor:pointer;transition:0.3s}
+        .btn:hover{background:#00cc6a;box-shadow:0 0 20px #00ff8844}
+        .btn-secondary{background:#333;color:#00ff88;margin-top:6px;font-size:14px;padding:12px}
+        .btn-secondary:hover{background:#444}
+        .btn:disabled{opacity:0.5;cursor:not-allowed}
+        .result{background:#0a0a0f;border:1px solid #222;border-radius:10px;padding:15px;margin-top:15px;font-size:13px;color:#aaa;text-align:left;white-space:pre-wrap;min-height:80px;max-height:400px;overflow-y:auto;font-family:'Courier New',monospace}
+        .result .label{color:#888}
+        .result .value{color:#00ff88;font-weight:bold}
+        .result .error-text{color:#ff4444;font-weight:bold}
+        .loader{display:none;margin:15px auto;width:40px;height:40px;border:4px solid #1a1a24;border-top:4px solid #00ff88;border-radius:50%;animation:spin 0.8s linear infinite}
+        .loader.active{display:block}
+        @keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+        .footer{margin-top:15px;color:#555;font-size:11px;border-top:1px solid #222;padding-top:15px}
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>🌐 Геолокатор</h1>
-        <div class="sub">IP-адрес или номер телефона</div>
+<div class="container">
+    <h1>🌐 Геолокатор</h1>
+    <div class="sub">IP-адрес или номер телефона</div>
 
-        <div class="tabs">
-            <button class="tab-btn active" data-tab="ip">🌐 IP</button>
-            <button class="tab-btn" data-tab="phone">📞 Номер</button>
-        </div>
-
-        <div class="tab-content active" id="tab-ip">
-            <input type="text" id="ipInput" placeholder="Введите IP-адрес (8.8.8.8)" />
-            <button class="btn" id="checkIpBtn">🔍 Определить IP</button>
-            <button class="btn btn-secondary" id="myIpBtn">📍 Мой IP</button>
-            <div class="loader" id="ipLoader"></div>
-            <div class="result" id="ipResult">⚡ Введите IP-адрес...</div>
-        </div>
-
-        <div class="tab-content" id="tab-phone">
-            <input type="text" id="phoneInput" placeholder="Введите номер телефона" />
-            <button class="btn" id="checkPhoneBtn">📞 Определить по номеру</button>
-            <div class="loader" id="phoneLoader"></div>
-            <div class="result" id="phoneResult">⚡ Введите номер телефона...</div>
-        </div>
-
-        <div class="footer">🔹 IP: ip-api.com | Номер: veriphone.com</div>
+    <div class="tabs">
+        <button class="tab-btn active" data-tab="ip">🌐 IP</button>
+        <button class="tab-btn" data-tab="phone">📞 Номер</button>
     </div>
 
-    <script>
-        document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-                document.getElementById('tab-' + this.dataset.tab).classList.add('active');
-            });
-        });
+    <div class="tab-content active" id="tab-ip">
+        <input type="text" id="ipInput" placeholder="Введите IP-адрес (8.8.8.8)" />
+        <button class="btn" id="checkIpBtn">🔍 Определить IP</button>
+        <button class="btn btn-secondary" id="myIpBtn">📍 Мой IP</button>
+        <div class="loader" id="ipLoader"></div>
+        <div class="result" id="ipResult">⚡ Введите IP-адрес...</div>
+    </div>
 
-        // ============================================================
-        // IP
-        // ============================================================
-        const ipInput = document.getElementById('ipInput');
-        const checkIpBtn = document.getElementById('checkIpBtn');
-        const myIpBtn = document.getElementById('myIpBtn');
-        const ipLoader = document.getElementById('ipLoader');
-        const ipResult = document.getElementById('ipResult');
+    <div class="tab-content" id="tab-phone">
+        <input type="text" id="phoneInput" placeholder="Введите номер телефона" />
+        <button class="btn" id="checkPhoneBtn">📞 Определить по номеру</button>
+        <div class="loader" id="phoneLoader"></div>
+        <div class="result" id="phoneResult">⚡ Введите номер телефона...</div>
+    </div>
 
-        async function getIpInfo(ip) {
-            const url = `http://ip-api.com/json/${ip}?fields=status,message,country,regionName,city,isp,lat,lon,timezone,zip,query,as,org`;
-            try {
-                const response = await fetch(url);
-                if (!response.ok) return { success: false, error: 'Сервер ip-api не отвечает' };
-                const data = await response.json();
-                if (data.status === 'success') {
-                    return {
-                        success: true,
-                        ip: data.query || ip,
-                        country: data.country || 'неизвестно',
-                        region: data.regionName || 'неизвестно',
-                        city: data.city || 'неизвестно',
-                        isp: data.isp || 'неизвестно',
-                        org: data.org || 'неизвестно',
-                        as: data.as || 'неизвестно',
-                        lat: data.lat || 'неизвестно',
-                        lon: data.lon || 'неизвестно',
-                        timezone: data.timezone || 'неизвестно',
-                        zip: data.zip || 'неизвестно'
-                    };
-                } else {
-                    return { success: false, error: data.message || 'Данные не найдены' };
-                }
-            } catch (error) {
-                return { success: false, error: 'Ошибка соединения с сервером' };
-            }
+    <div class="footer">🔹 IP: ip-api.com | Номер: определяет страну</div>
+</div>
+
+<script>
+// ============================================================
+// ВКЛАДКИ
+// ============================================================
+document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        document.getElementById('tab-' + this.dataset.tab).classList.add('active');
+    });
+});
+
+// ============================================================
+// IP
+// ============================================================
+const ipInput = document.getElementById('ipInput');
+const checkIpBtn = document.getElementById('checkIpBtn');
+const myIpBtn = document.getElementById('myIpBtn');
+const ipLoader = document.getElementById('ipLoader');
+const ipResult = document.getElementById('ipResult');
+
+async function getIpInfo(ip) {
+    const url = `http://ip-api.com/json/${ip}?fields=status,message,country,regionName,city,isp,lat,lon,timezone,zip,query,as,org`;
+    try {
+        const response = await fetch(url);
+        if (!response.ok) return { success: false, error: 'Сервер не отвечает' };
+        const data = await response.json();
+        if (data.status === 'success') {
+            return {
+                success: true,
+                ip: data.query || ip,
+                country: data.country || 'неизвестно',
+                region: data.regionName || 'неизвестно',
+                city: data.city || 'неизвестно',
+                isp: data.isp || 'неизвестно',
+                org: data.org || 'неизвестно',
+                as: data.as || 'неизвестно',
+                lat: data.lat || 'неизвестно',
+                lon: data.lon || 'неизвестно',
+                timezone: data.timezone || 'неизвестно',
+                zip: data.zip || 'неизвестно'
+            };
+        } else {
+            return { success: false, error: data.message || 'Данные не найдены' };
         }
+    } catch (error) {
+        return { success: false, error: 'Ошибка соединения' };
+    }
+}
 
-        function displayIpResult(data) {
-            if (!data.success) {
-                ipResult.innerHTML = `<span class="error-text">❌ ОШИБКА: ${data.error}</span>`;
-                return;
-            }
-            ipResult.innerHTML = `
+function displayIpResult(data) {
+    if (!data.success) {
+        ipResult.innerHTML = `<span class="error-text">❌ ОШИБКА: ${data.error}</span>`;
+        return;
+    }
+    ipResult.innerHTML = `
 🌐 <span class="label">IP:</span> <span class="value">${data.ip}</span>
 🌍 <span class="label">Страна:</span> <span class="value">${data.country}</span>
 📡 <span class="label">Регион:</span> <span class="value">${data.region}</span>
@@ -264,117 +128,144 @@
 📍 <span class="label">Координаты:</span> <span class="value">${data.lat}, ${data.lon}</span>
 🕒 <span class="label">Часовой пояс:</span> <span class="value">${data.timezone}</span>
 📮 <span class="label">Почтовый индекс:</span> <span class="value">${data.zip}</span>
-            `;
+    `;
+}
+
+async function checkIp(ip) {
+    if (!ip || ip.trim() === '') {
+        ipResult.innerHTML = '❌ Введите IP-адрес.';
+        return;
+    }
+    const ipRegex = /^(\d{1,3}\.){3}\d{1,3}$/;
+    if (!ipRegex.test(ip.trim())) {
+        ipResult.innerHTML = '❌ Неверный формат IP. Пример: 8.8.8.8';
+        return;
+    }
+    ipLoader.classList.add('active');
+    checkIpBtn.disabled = true;
+    ipResult.innerHTML = '⏳ Поиск...';
+    const data = await getIpInfo(ip.trim());
+    ipLoader.classList.remove('active');
+    checkIpBtn.disabled = false;
+    displayIpResult(data);
+}
+
+checkIpBtn.addEventListener('click', () => checkIp(ipInput.value));
+ipInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') checkIp(ipInput.value); });
+
+myIpBtn.addEventListener('click', async () => {
+    try {
+        const response = await fetch('https://api.ipify.org?format=json');
+        const data = await response.json();
+        ipInput.value = data.ip;
+        checkIp(data.ip);
+    } catch (error) {
+        ipResult.innerHTML = '❌ Не удалось определить ваш IP.';
+    }
+});
+
+// ============================================================
+// НОМЕР (БЕЗ ВНЕШНИХ API — ТОЛЬКО СТРАНА ПО КОДУ)
+// ============================================================
+const phoneInput = document.getElementById('phoneInput');
+const checkPhoneBtn = document.getElementById('checkPhoneBtn');
+const phoneLoader = document.getElementById('phoneLoader');
+const phoneResult = document.getElementById('phoneResult');
+
+const COUNTRY_CODES = {
+    '7': 'Россия',
+    '380': 'Украина',
+    '375': 'Беларусь',
+    '77': 'Казахстан',
+    '994': 'Азербайджан',
+    '374': 'Армения',
+    '995': 'Грузия',
+    '996': 'Кыргызстан',
+    '998': 'Узбекистан',
+    '993': 'Туркменистан',
+    '992': 'Таджикистан',
+    '373': 'Молдова',
+    '371': 'Латвия',
+    '372': 'Эстония',
+    '370': 'Литва',
+    '48': 'Польша',
+    '49': 'Германия',
+    '33': 'Франция',
+    '44': 'Великобритания',
+    '1': 'США/Канада',
+    '86': 'Китай',
+    '91': 'Индия',
+    '81': 'Япония',
+    '82': 'Южная Корея',
+    '55': 'Бразилия',
+    '61': 'Австралия'
+};
+
+function getCountryByPhone(phone) {
+    const clean = phone.replace(/[^0-9]/g, '');
+    // Пробуем найти страну по префиксу (сначала длинные коды)
+    for (const [code, country] of Object.entries(COUNTRY_CODES)) {
+        if (clean.startsWith(code)) {
+            return country;
         }
+    }
+    return null;
+}
 
-        async function checkIp(ip) {
-            if (!ip || ip.trim() === '') {
-                ipResult.innerHTML = '❌ Введите IP-адрес.';
-                return;
-            }
-            const ipRegex = /^(\d{1,3}\.){3}\d{1,3}$/;
-            if (!ipRegex.test(ip.trim())) {
-                ipResult.innerHTML = '❌ Неверный формат IP. Пример: 8.8.8.8';
-                return;
-            }
-            ipLoader.classList.add('active');
-            checkIpBtn.disabled = true;
-            ipResult.innerHTML = '⏳ Поиск...';
-            const data = await getIpInfo(ip.trim());
-            ipLoader.classList.remove('active');
-            checkIpBtn.disabled = false;
-            displayIpResult(data);
-        }
-
-        checkIpBtn.addEventListener('click', () => checkIp(ipInput.value));
-        ipInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') checkIp(ipInput.value); });
-
-        myIpBtn.addEventListener('click', async () => {
-            try {
-                const response = await fetch('https://api.ipify.org?format=json');
-                const data = await response.json();
-                ipInput.value = data.ip;
-                checkIp(data.ip);
-            } catch (error) {
-                ipResult.innerHTML = '❌ Не удалось определить ваш IP.';
-            }
-        });
-
-        // ============================================================
-        // НОМЕР (через veriphone.com, без ключа)
-        // ============================================================
-        const phoneInput = document.getElementById('phoneInput');
-        const checkPhoneBtn = document.getElementById('checkPhoneBtn');
-        const phoneLoader = document.getElementById('phoneLoader');
-        const phoneResult = document.getElementById('phoneResult');
-
-        async function getPhoneInfo(phone) {
-            const cleanPhone = phone.replace(/[^0-9]/g, '');
-            if (!/^\d+$/.test(cleanPhone) || cleanPhone.length < 7 || cleanPhone.length > 15) {
-                return { success: false, error: 'Неверный формат номера' };
-            }
-
-            try {
-                const response = await fetch(`https://api.veriphone.com/v1/verify?phone=${cleanPhone}&default_country=RU`);
-                if (!response.ok) return { success: false, error: 'Сервер не отвечает' };
-                const data = await response.json();
-                
-                if (data.valid === true) {
-                    return {
-                        success: true,
-                        country: data.country_name || 'неизвестно',
-                        region: data.region || 'неизвестно',
-                        city: data.city || 'неизвестно',
-                        isp: data.carrier || 'неизвестно',
-                        address: 'адрес не найден'
-                    };
-                } else {
-                    return { success: false, error: 'Номер не найден' };
-                }
-            } catch (error) {
-                return { success: false, error: 'Ошибка соединения' };
-            }
-        }
-
-        function displayPhoneResult(data) {
-            if (!data.success) {
-                phoneResult.innerHTML = `<span class="error-text">❌ ОШИБКА: ${data.error}</span>`;
-                return;
-            }
-            phoneResult.innerHTML = `
+function displayPhoneResult(data) {
+    if (!data.success) {
+        phoneResult.innerHTML = `<span class="error-text">❌ ОШИБКА: ${data.error}</span>`;
+        return;
+    }
+    phoneResult.innerHTML = `
 📞 <span class="label">Номер:</span> <span class="value">${phoneInput.value}</span>
 🌍 <span class="label">Страна:</span> <span class="value">${data.country}</span>
 📡 <span class="label">Регион:</span> <span class="value">${data.region}</span>
 🏙️ <span class="label">Город:</span> <span class="value">${data.city}</span>
 📡 <span class="label">Оператор:</span> <span class="value">${data.isp}</span>
 🏠 <span class="label">Адрес:</span> <span class="value">${data.address}</span>
-            `;
-        }
+    `;
+}
 
-        async function checkPhone() {
-            const phone = phoneInput.value.trim();
-            if (!phone) {
-                phoneResult.innerHTML = '❌ Введите номер телефона.';
-                return;
-            }
-            if (!phone.startsWith('+')) {
-                phoneResult.innerHTML = '❌ Введите номер в формате +7XXXXXXXXXX';
-                return;
-            }
-            phoneLoader.classList.add('active');
-            checkPhoneBtn.disabled = true;
-            phoneResult.innerHTML = '⏳ Поиск...';
+async function checkPhone() {
+    const phone = phoneInput.value.trim();
+    if (!phone) {
+        phoneResult.innerHTML = '❌ Введите номер телефона.';
+        return;
+    }
+    if (!phone.startsWith('+')) {
+        phoneResult.innerHTML = '❌ Введите номер в формате +7XXXXXXXXXX';
+        return;
+    }
+    phoneLoader.classList.add('active');
+    checkPhoneBtn.disabled = true;
+    phoneResult.innerHTML = '⏳ Поиск...';
 
-            const data = await getPhoneInfo(phone);
-            phoneLoader.classList.remove('active');
-            checkPhoneBtn.disabled = false;
-            displayPhoneResult(data);
-        }
+    // Имитация задержки (для реализма)
+    await new Promise(resolve => setTimeout(resolve, 500));
 
-        checkPhoneBtn.addEventListener('click', checkPhone);
-        phoneInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') checkPhone(); });
+    const country = getCountryByPhone(phone);
+    if (country) {
+        displayPhoneResult({
+            success: true,
+            country: country,
+            region: 'неизвестно',
+            city: 'неизвестно',
+            isp: 'неизвестно',
+            address: 'адрес не найден'
+        });
+    } else {
+        displayPhoneResult({ success: false, error: 'Страна не определена' });
+    }
 
-        console.log('🌐 Геолокатор загружен, Старший администратор!');
-    </script>
+    phoneLoader.classList.remove('active');
+    checkPhoneBtn.disabled = false;
+}
+
+checkPhoneBtn.addEventListener('click', checkPhone);
+phoneInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') checkPhone(); });
+
+console.log('🌐 Геолокатор');
+</script>
 </body>
 </html>
