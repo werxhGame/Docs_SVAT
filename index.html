@@ -197,7 +197,7 @@
             <div class="result" id="phoneResult">⚡ Введите номер телефона...</div>
         </div>
 
-        <div class="footer">🔹 IP: ip-api.com | Номер: numverify.com (реальные данные)</div>
+        <div class="footer">🔹 IP: ip-api.com | Номер: veriphone.com</div>
     </div>
 
     <script>
@@ -301,7 +301,7 @@
         });
 
         // ============================================================
-        // НОМЕР (через numverify с демо-ключом)
+        // НОМЕР (через veriphone.com, без ключа)
         // ============================================================
         const phoneInput = document.getElementById('phoneInput');
         const checkPhoneBtn = document.getElementById('checkPhoneBtn');
@@ -310,60 +310,29 @@
 
         async function getPhoneInfo(phone) {
             const cleanPhone = phone.replace(/[^0-9]/g, '');
-            
             if (!/^\d+$/.test(cleanPhone) || cleanPhone.length < 7 || cleanPhone.length > 15) {
                 return { success: false, error: 'Неверный формат номера' };
             }
 
-            // Используем демо-ключ numverify (бесплатно, 100 запросов/месяц)
-            // Вы можете заменить на свой ключ с numverify.com
-            const API_KEY = 'ваш_ключ_numverify';
-            
-            // Если ключ не заменён — используем публичный API (без ключа)
-            if (API_KEY === 'ваш_ключ_numverify') {
-                // Резервный вариант: используем бесплатный сервис
-                try {
-                    // Пробуем через абстрактный API (без ключа)
-                    const response = await fetch(`https://restcountries.com/v3.1/alpha/ru`);
-                    if (response.ok) {
-                        const data = await response.json();
-                        return {
-                            success: true,
-                            country: 'Россия',
-                            region: 'Неизвестно',
-                            city: 'Неизвестно',
-                            isp: 'Неизвестно',
-                            address: 'Адрес недоступен'
-                        };
-                    } else {
-                        return { success: false, error: 'Данные не найдены' };
-                    }
-                } catch (e) {
-                    return { success: false, error: 'Ошибка соединения' };
-                }
-            }
-
-            // Реальный запрос к numverify
             try {
-                const url = `http://apilayer.net/api/validate?access_key=${API_KEY}&number=${cleanPhone}&format=1`;
-                const response = await fetch(url);
-                if (!response.ok) return { success: false, error: 'Сервер numverify не отвечает' };
+                const response = await fetch(`https://api.veriphone.com/v1/verify?phone=${cleanPhone}&default_country=RU`);
+                if (!response.ok) return { success: false, error: 'Сервер не отвечает' };
                 const data = await response.json();
                 
                 if (data.valid === true) {
                     return {
                         success: true,
                         country: data.country_name || 'неизвестно',
-                        region: data.location || 'неизвестно',
-                        city: data.location || 'неизвестно',
+                        region: data.region || 'неизвестно',
+                        city: data.city || 'неизвестно',
                         isp: data.carrier || 'неизвестно',
-                        address: data.location || 'адрес не найден'
+                        address: 'адрес не найден'
                     };
                 } else {
-                    return { success: false, error: 'Номер не найден в базе' };
+                    return { success: false, error: 'Номер не найден' };
                 }
             } catch (error) {
-                return { success: false, error: 'Ошибка соединения с сервером' };
+                return { success: false, error: 'Ошибка соединения' };
             }
         }
 
