@@ -58,7 +58,7 @@
         <div class="result" id="phoneResult">⚡ Введите номер телефона...</div>
     </div>
 
-    <div class="footer">🔹 IP: ip-api.com / ipwhois.io</div>
+    <div class="footer">🔹 IP: ip-api.com | Номер: veriphone.com</div>
 </div>
 
 <script>
@@ -75,7 +75,7 @@ document.querySelectorAll('.tab-btn').forEach(btn => {
 });
 
 // ============================================================
-// IP (С ДВУМЯ API)
+// IP
 // ============================================================
 const ipInput = document.getElementById('ipInput');
 const checkIpBtn = document.getElementById('checkIpBtn');
@@ -84,7 +84,6 @@ const ipLoader = document.getElementById('ipLoader');
 const ipResult = document.getElementById('ipResult');
 
 async function getIpInfo(ip) {
-    // Пробуем первый API
     try {
         const url = `http://ip-api.com/json/${ip}?fields=status,message,country,regionName,city,isp,lat,lon,timezone,zip,query,as,org`;
         const response = await fetch(url);
@@ -109,7 +108,6 @@ async function getIpInfo(ip) {
         }
     } catch (e) {}
 
-    // Если первый не сработал — пробуем второй API (ipwhois.io)
     try {
         const url2 = `https://ipwhois.io/json/${ip}`;
         const response2 = await fetch(url2);
@@ -190,7 +188,7 @@ myIpBtn.addEventListener('click', async () => {
 });
 
 // ============================================================
-// НОМЕР (ЛОКАЛЬНОЕ ОПРЕДЕЛЕНИЕ СТРАНЫ)
+// НОМЕР (РЕАЛЬНЫЕ ДАННЫЕ ЧЕРЕЗ VERIPHONE)
 // ============================================================
 const phoneInput = document.getElementById('phoneInput');
 const checkPhoneBtn = document.getElementById('checkPhoneBtn');
@@ -236,6 +234,63 @@ function getCountryByPhone(phone) {
     return null;
 }
 
+async function getPhoneInfo(phone) {
+    const cleanPhone = phone.replace(/[^0-9]/g, '');
+    if (!/^\d+$/.test(cleanPhone) || cleanPhone.length < 7) {
+        return { success: false, error: 'Неверный формат номера' };
+    }
+
+    try {
+        // Пробуем получить реальные данные через veriphone.com
+        const response = await fetch(`https://api.veriphone.com/v1/verify?phone=${cleanPhone}&default_country=RU`);
+        if (!response.ok) {
+            return { success: false, error: 'Сервер не отвечает' };
+        }
+        const data = await response.json();
+
+        if (data.valid === true) {
+            return {
+                success: true,
+                country: data.country_name || 'неизвестно',
+                region: data.region || 'неизвестно',
+                city: data.city || 'неизвестно',
+                isp: data.carrier || 'неизвестно',
+                address: data.location || 'адрес не найден'
+            };
+        } else {
+            // Если API не дал данные — возвращаем страну по коду
+            const country = getCountryByPhone(phone);
+            if (country) {
+                return {
+                    success: true,
+                    country: country,
+                    region: 'неизвестно',
+                    city: 'неизвестно',
+                    isp: 'неизвестно',
+                    address: 'адрес не найден'
+                };
+            } else {
+                return { success: false, error: 'Номер не найден' };
+            }
+        }
+    } catch (error) {
+        // Если API недоступен — страна по коду
+        const country = getCountryByPhone(phone);
+        if (country) {
+            return {
+                success: true,
+                country: country,
+                region: 'неизвестно',
+                city: 'неизвестно',
+                isp: 'неизвестно',
+                address: 'адрес не найден'
+            };
+        } else {
+            return { success: false, error: 'Ошибка соединения' };
+        }
+    }
+}
+
 function displayPhoneResult(data) {
     if (!data.success) {
         phoneResult.innerHTML = `<span class="error-text">❌ ОШИБКА: ${data.error}</span>`;
@@ -265,24 +320,10 @@ async function checkPhone() {
     checkPhoneBtn.disabled = true;
     phoneResult.innerHTML = '⏳ Поиск...';
 
-    await new Promise(resolve => setTimeout(resolve, 500));
-
-    const country = getCountryByPhone(phone);
-    if (country) {
-        displayPhoneResult({
-            success: true,
-            country: country,
-            region: 'неизвестно',
-            city: 'неизвестно',
-            isp: 'неизвестно',
-            address: 'адрес не найден'
-        });
-    } else {
-        displayPhoneResult({ success: false, error: 'Страна не определена' });
-    }
-
+    const data = await getPhoneInfo(phone);
     phoneLoader.classList.remove('active');
     checkPhoneBtn.disabled = false;
+    displayPhoneResult(data);
 }
 
 checkPhoneBtn.addEventListener('click', checkPhone);
